@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Giphy API</title>
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm"
+      crossorigin="anonymous">
+</head>
+
+<body>
+    <div id="buttons-view"></div>
+    <form id="car-form">
+        <label for="car-input">Add a Car</label>
+        <input type="text" id="car-input">
+        <br>
+        <input id="add-car" type="submit" value="Add a Car">
+    </form>
+
+    <div id="cars"></div>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script type="text/javascript">
+        // Initial array of car brands for user to see
+        var cars = ["Tesla", "Subaru", "Porsche", "Volkswagen", "BMW"];
+
+        //I want to run this function everytime a car is added to the array with add-car button.
+        // function displayGIFs() {
+
+
+
+        function renderButtons() {
+            $("#buttons-view").empty();
+            // Loops through the array of cars
+            for (var i = 0; i < cars.length; i++) {
+                var a = $("<button>");
+                a.addClass("car");
+                a.addClass("btn btn-dark");
+                a.attr("data-name", cars[i]);
+                a.text(cars[i]);
+                $("#buttons-view").append(a);
+            }
+        }
+        // This function handles events where the add car button is clicked
+        $("#add-car").on("click", function (event) {
+            event.preventDefault();
+            // This line of code will grab the input from the textbox
+            var car = $("#car-input").val().trim();
+
+            // The car from the textbox is then added to our array
+            cars.push(car);
+            console.log(cars);
+            //I want to replace the teslas with the new car entered in the text box
+            // var carImage = document.getElementById("carImage");
+            // carImage.parentNode.removeChild(carImage);
+            // displayGIFs();
+
+            // Calling renderButtons which handles the processing of our car array
+            renderButtons();
+
+
+        });
+        renderButtons();
+
+        $(document).on("click", ".car", displayGIF);
+
+        function displayGIF() {
+            console.log("click works");
+            var carGIF = $(this).attr("data-name");
+            console.log(carGIF);
+            $("#cars").empty();
+
+            var apiKey = "dtG4uGfbwlxZZebiAtWUemjHM8NQGod2";
+            // Giphy API and API key
+            var queryURL = "https://api.giphy.com/v1/gifs/search?api_key=dtG4uGfbwlxZZebiAtWUemjHM8NQGod2&q=" + carGIF + "&limit=5&offset=0&rating=PG-13&lang=en";
+            $.ajax({
+                url: queryURL,
+                method: 'GET'
+            }).then(function (result) {
+                var results = result.data;
+                console.log(results);
+                for (var i = 0; i < results.length; i++) {
+                    var carDiv = $("<div class=\"car-item\">");
+
+                    var rating = results[i].rating;
+                    var title = results[i].title;
+                    console.log(title);
+
+                    var showRating = $("<p>").text("Rating: " + rating);
+                    //why does it only return the rating and not other attributes from the data???
+                    var make = $("<p>").text("Make: " + title);
+
+                    var animated = results[i].images.fixed_height.url;
+                    var still = results[i].images.fixed_height_still.url;
+
+                    var carImage = $("<img>");
+                    carImage.attr("src", still);
+                    carImage.attr("data-still", still);
+                    carImage.attr("data-animate", animated);
+                    carImage.attr("data-state", "still");
+                    carImage.addClass("gif");
+
+
+                    carDiv.append(showRating);
+                    carDiv.append(make);
+                    carDiv.append(carImage);
+
+                    $("#cars").append(carDiv);
+                }
+                $(".gif").on("click", function () {
+                    console.log("click");
+                    var state = $(this).attr("data-state");
+                    console.log(state);
+                    //This code below starts the GIF but won't stop it 
+                    if (state === "still") {
+                        $(this).attr("src", $(this).attr("data-animate"));
+                        $(this).attr("data-state", "anmiated");
+                    } else {
+                        $(this).attr("src", $(this).attr("data-still"));
+                        $(this).attr("data-state", "still");
+                    }
+                });
+            })
+        }
+
+    </script>
+
+</body>
+
+</html>
