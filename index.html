@@ -10,19 +10,23 @@
 
 <body>
     <div id="buttons-view"></div>
+    <br>
+    <h3>Click on the buttons above to view GIFs of a car brand</h3>
+    <br>
+    <h6>If you don't see the brand you are looking for, you can add it to the list using the Search below</h6>
     <form id="car-form">
-        <label for="car-input">Add a Car</label>
+        <label for="car-input">Search</label>
         <input type="text" id="car-input">
         <br>
-        <input id="add-car" type="submit" value="Add a Car">
+        <input id="add-car" type="submit" value="Add Car Brand">
     </form>
-
+    <br>
     <div id="cars"></div>
 
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
     <script type="text/javascript">
         // Initial array of car brands for user to see
-        var cars = ["Tesla", "Subaru", "Porsche", "Volkswagen", "BMW"];
+        var cars = ["Tesla", "Subaru","Mitsubishi","Acura","Nissan","Lexus","Mercedes","Audi", "Porsche", "Volkswagen", "BMW", "Mini Cooper", "Range Rover","Jaguar auto","Bentley","Rolls Royce","Ferrari","Lotus auto","Aston Martin","Lamborghini","Bugatti","Chevy auto","Ford","Pontiac","Dodge", "Chrysler","Cadillac","Jeep","Ram auto"];
 
         //I want to run this function everytime a car is added to the array with add-car button.
         // function displayGIFs() {
